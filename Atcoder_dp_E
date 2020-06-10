@@ -1,0 +1,64 @@
+//AUTHOR: RAVAN_2070
+//PUNE INSTITUTE OF COMPUTER TECHNOLOGY
+//Atcoder Educational DP
+//E-Knapsack2
+/*
+    I ♥ CLARICE STARLING
+
+    EXPLAINATION BELOW->
+    Dp + small trick
+      
+    Observation:->
+    Clue Knapsack1- 1≤W≤10^5 and 1≤vi≤10^9
+    Clue Knapsack2- 1≤W≤10^9 and 1≤vi≤10^3
+    
+    In Knapsack1 
+    Our dp state was dp[i][j] where i means starting from i we take into consideration all elements,j indicates that max capacity is j
+    and dp[i][j] == max(⅀ v) possible
+    but this would fail due to MLE as well TLE as max(W)=1e9
+    
+    In knapsack2
+    kmax=1e3 and Nmax=100 so max possible value that can be obtained is 1e5;
+    So we can phrase our dp[i][j] such that
+    where i means starting from i we take into consideration all elements,j indicates that  ⅀value limit is j
+    and dp[i][j] == min(⅀ w) possible
+     * 
+    So now our ans is max (possible) j for which ⅀weight is <=W;
+    We here implement using Errichto's technique;
+*/
+//
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+#define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define all(x) x.begin(),x.end()
+#define fo(i,a,b) for(i=a;i<b;i++)
+#define foe(i,a,b) for(i=a;i<=b;i++)
+const ll INF=(ll)1e18+5;
+void solve()
+{
+    int n,W,i,sum_value=0,value_already;cin>>n>>W;
+    vector<int>w(n),v(n);
+    fo(i,0,n)cin>>w[i]>>v[i],sum_value+=v[i];
+    
+    vector<ll>dp(sum_value+1,INF);
+    dp[0]=0;
+    fo(i,0,n)
+    {
+        for(value_already=sum_value-v[i];value_already>=0;value_already--)
+        dp[value_already+v[i]]=min(dp[value_already+v[i]],w[i]+dp[value_already]);
+    }
+    ll ans=0;
+    foe(i,0,sum_value)if(dp[i]<=W)ans=(ll)i;
+    
+    cout<<ans<<"\n";
+}
+int main()
+{
+   fastio
+   solve();
+  return 0;
+}
+
