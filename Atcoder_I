@@ -1,0 +1,70 @@
+//AUTHOR: RAVAN_2070
+//PUNE INSTITUTE OF COMPUTER TECHNOLOGY
+//Atcoder Educational DP
+//E-Knapsack2
+/*
+    I ♥ CLARICE STARLING
+
+    EXPLAINATION BELOW->
+    Dp + Probability
+    Observation:->
+    Let f(i, j) be the probability of getting exactly i heads among the first j coins. 
+    We have two possibilities for the j-th coin. 
+    Case 1 - It is a heads. 
+    The probability of getting a head is p[j]. 
+    And we need to get exactly (i - 1) heads from the previous (j - 1) coins. 
+    This is given by p[j] x f(i - 1, j - 1)
+
+    Case 2 - It is tails
+    The probability is given by (1 - p[j])
+    We need i heads from the first j - 1 coins. 
+    The probability is (1 - p[j]) x f(i, j - 1)
+
+    The base case is that f(0, 0) = 1. 
+    ------
+    To get the answer we need to sum over all f(i, N) where i > N/2.
+    ----------
+   
+*/
+//
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+#define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define all(x) x.begin(),x.end()
+#define fo(i,a,b) for(i=a;i<b;i++)
+#define foe(i,a,b) for(i=a;i<=b;i++)
+const ll INF=(ll)1e18+5;
+void solve()
+{
+    int n,i,j;cin>>n;
+    double p[n+1],ans=0;
+    foe(i,1,n)cin>>p[i];
+    
+    double dp_heads[n+1][n+1];
+    foe(i,0,n)
+    foe(j,0,n)
+    dp_heads[i][j]=0;
+    
+    dp_heads[0][0]=1;
+    foe(i,1,n)
+    {
+        double h,t;
+        h=p[i];t=1.0-h;
+        dp_heads[0][i]=t*dp_heads[0][i-1];
+        int heads;
+        foe(heads,1,i)
+        dp_heads[heads][i]=h*dp_heads[heads-1][i-1]+t*dp_heads[heads][i-1];
+    }
+    for(i=(n/2)+1;i<=n;i++)ans+=dp_heads[i][n];
+    cout<<setprecision(10)<<ans<<"\n";
+}
+int main()
+{
+   fastio
+   solve();
+  return 0;
+}
+
