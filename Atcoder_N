@@ -1,0 +1,69 @@
+//AUTHOR: RAVAN_2070
+//PUNE INSTITUTE OF COMPUTER TECHNOLOGY
+//Atcoder Educational DP
+//N-Slimes
+/*
+    I ♥ CLARICE STARLING
+
+    EXPLAINATION BELOW->
+    Dp  
+    Consider testcase
+    3
+    1 2 3
+    Approach1  1 2 3==> 3 3==>6  3 + 6=9
+    Approach2  1 2 3==>1 5==>6   5 + 6=11
+    
+    At the end of each approach we get 6 so lets think out reverse
+           6(can be formed by)
+           /   or   \
+          /          \
+    interval[0..1]+    interval[0..0]+
+     interval[2..2]     interval[1..2]
+    and further so on
+    
+    From this we can say that same intervals can occur again in the recursion tree
+    Hence we can observe Overlapping subproblems
+    hence Dp.
+   
+*/
+//Iterative Solution
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+#define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define all(x) x.begin(),x.end()
+#define fo(i,a,b) for(i=a;i<b;i++)
+#define foe(i,a,b) for(i=a;i<=b;i++)
+#define MOD7 1000000007
+const ll INF=(ll)1e18+5;
+void solve()
+{
+   int n,i,j,k,interval;cin>>n;
+   int A[n];
+   ll ps[n+1];ps[0]=0;
+   ll dp[n][n];
+   fo(i,0,n)
+   fo(j,0,n)dp[i][j]=INF;
+   fo(i,0,n){cin>>A[i];dp[i][i]=0;ps[i+1]=ps[i]+A[i];}
+   
+   for(interval=1;interval<=n-1;interval++)
+   {
+       i=0;j=interval;
+       while(j<n)
+       {
+          
+          for(k=i;k<j;k++)dp[i][j]=min(dp[i][j],dp[i][k]+dp[k+1][j]+(ps[j+1]-ps[i]));
+          i++;j++;
+       }
+   }
+   cout<<dp[0][n-1]<<"\n";
+}
+int main()
+{
+   fastio
+   solve();
+  return 0;
+}
+
