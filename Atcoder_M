@@ -1,0 +1,65 @@
+//AUTHOR: RAVAN_2070
+//PUNE INSTITUTE OF COMPUTER TECHNOLOGY
+//Atcoder Educational DP
+//M-Candies
+/*
+    I ♥ CLARICE STARLING
+
+    EXPLAINATION BELOW->
+    Dp  
+    If you think in terms of Brute force 
+    Ans can found by considering all subsequences for which sum of candies given is exactly == K
+    and just go on adding up the count..
+    But the Time Complexity will be around O(n!)
+    
+    Observation
+    Let F(i,j) be number of ways to to distribute exactly i candies considering people from jth index to n;
+    the F(i,j)=(jth distributed 0 candies)*F(i,j+1) + (jth  distributed 1 candy)*F(i-1,j+1) +....(to jth distributed k candies)*F(i-k,j+1)+..
+    Hence from this we can clearly observe both properties
+    1)Overlapping subproblems
+    2)Optimal Substructure
+    Time Complexity O(n^2)
+*/
+//Iterative Solution
+#include<bits/stdc++.h>
+using namespace std;
+typedef unsigned long long int ull;
+typedef long long int ll;
+#define fastio ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define pb push_back
+#define all(x) x.begin(),x.end()
+#define fo(i,a,b) for(i=a;i<b;i++)
+#define foe(i,a,b) for(i=a;i<=b;i++)
+#define MOD7 1000000007
+const ll INF=(ll)1e18+5;
+void solve()
+{
+   int n,k,i,j;cin>>n>>k;
+   int ps[k+2][n],dp[k+1][n],A[n];
+   
+   fo(i,0,n)cin>>A[i];
+   
+   fo(j,0,n)ps[0][j]=0;
+   foe(i,0,k){dp[i][n-1]=((i<=A[n-1])?1:0);ps[i+1][n-1]=ps[i][n-1]+dp[i][n-1];}
+   for(j=n-2;j>=0;j--)
+   {
+       for(i=0;i<=k;i++)
+       {
+           int low,high;
+           low=max(0,i-A[j]);high=i;
+           dp[i][j]=(ps[high+1][j+1]-ps[low][j+1]+MOD7)%MOD7;
+           ps[i+1][j]=(ps[i][j]+dp[i][j])%MOD7;
+       }
+       
+       
+   }
+   cout<<dp[k][0]%MOD7<<"\n";
+
+}
+int main()
+{
+   fastio
+   solve();
+  return 0;
+}
+
